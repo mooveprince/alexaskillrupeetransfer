@@ -3,6 +3,10 @@ var Utility = require ('./utility.js');
 
 var handlers = {
 
+    "GetTransferRate" : function () {
+
+    },
+
     "AMAZON.StopIntent": function () {
         var speechText = "Goodbye";
         this.emit(':tell', speechText);
