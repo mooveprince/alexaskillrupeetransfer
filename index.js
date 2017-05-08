@@ -12,16 +12,23 @@ var handlers = {
         var speechText = "Goodbye";
         this.emit(':tell', speechText);
     },
-    
+
     "AMAZON.HelpIntent" : function () {
         var speechText = "Here are somethings you can say: ";
         speechText += " What's' today's transfer rate ? ";
         speechText += " Current news in Tech Crunch.";
         speechText += " Trending topics in Tech Meme";
 
-        this.emit(':ask', speechText, speechText);
-        
-    }
+        this.emit(':ask', speechText, speechText);  
+    },
+
+    "Unhandled" : function () {
+        var speechText = `Sorry, I didn\'t get that.`;
+        var repromptText = `For instructions on what you can say, please say help me.`;
+
+        this.emit(':ask', speechText, repromptText);
+
+    }    
 }
 
 exports.handler = function (event, context) {
