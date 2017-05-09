@@ -5,6 +5,23 @@ var handlers = {
 
     "GetTransferRate" : function () {
 
+        var exchangeResult = Utility.getExchangeRate();
+        exchangeResult.then(data => {
+            var exchangeRate = data.exchangeRate.val;
+            var transferRate = [];
+
+            var transferResult = Utility.getTransferRateList();
+            transferResult.then(dataList => {
+                for (i=0; i<3; i++){    //get only top three agencies
+                    transferRate.push(dataList.exchangeRateList[i]);
+                }
+            var speechText = `Empty Speech for Now`;
+            var cardText = `Empty Card For now`;
+            this.emit(':tellWithCard', speechText, 'Transfer Rate', cardText);
+            });
+        });
+
+
     },
 
     "AMAZON.StopIntent": function () {
