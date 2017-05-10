@@ -9,15 +9,24 @@ var handlers = {
         exchangeResult.then(data => {
             var exchangeRate = data.exchangeRate.val;
             var transferRate = [];
+            var includePause = "<break time='1s'/>";
 
             var transferResult = Utility.getTransferRateList();
             transferResult.then(dataList => {
                 for (i=0; i<3; i++){    //get only top three agencies
                     transferRate.push(dataList.exchangeRateList[i]);
                 }
-            var speechText = `Empty Speech for Now`;
-            var cardText = `Empty Card For now`;
-            this.emit(':tellWithCard', speechText, 'Transfer Rate', cardText);
+            var speechText = `Current exchange rate to India is ${exchangeRate} Rupees. ${includePause}`;
+            speechText += `The best rate is offered by ${transferRate[0].agencyName}. Which is ${transferRate[0].exchangeRate} ${includePause}`;
+            speechText += `Next best is offered by ${transferRate[1].agencyName}. Which is ${transferRate[1].exchangeRate} ${includePause}`;
+            speechText += `Third best rate is offered by ${transferRate[2].agencyName}. Which is ${transferRate[2].exchangeRate} ${includePause}`;
+            
+            var cardText = `1 USD = ${exchangeRate} Rupees. \n`;
+            cardText += `${transferRate[0].agencyName} Offers ${transferRate[0].exchangeRate} \n`
+            cardText += `${transferRate[1].agencyName} Offers ${transferRate[1].exchangeRate} AND \n`
+            cardText += `${transferRate[2].agencyName} Offers ${transferRate[2].exchangeRate}. \n`
+
+            this.emit(':tellWithCard', speechText, 'Best Transfer Rate', cardText);
             });
         });
 
@@ -36,9 +45,9 @@ var handlers = {
 
     "AMAZON.HelpIntent" : function () {
         var speechText = "Here are somethings you can say: ";
-        speechText += " What's' today's transfer rate ? ";
-        speechText += " Current news in Tech Crunch.";
-        speechText += " Trending topics in Tech Meme";
+        speechText += " The best agency";
+        speechText += " What's' the transfer rate ? ";
+        speechText += " The best transfer rate ?";
 
         this.emit(':ask', speechText, speechText);  
     },
