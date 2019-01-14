@@ -10,7 +10,7 @@ var handlers = {
         console.log ("Event intent " + JSON.stringify(this.event.request.intent));
         var exchangeResult = Utility.getExchangeRate();
         exchangeResult.then(data => {
-            var exchangeRate = data.exchangeRate.val;
+            var exchangeRate = data.exchangeRate;
             console.log ("Current Exchange rate is " + exchangeRate);
             var transferRate = [];
             var includePause = "<break time='1s'/>";
