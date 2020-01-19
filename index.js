@@ -8,14 +8,17 @@ var handlers = {
     "GetTransferRate" : function () {
         console.log ("Get the transfer rate")
         console.log ("Event intent " + JSON.stringify(this.event.request.intent));
-        var exchangeResult = Utility.getExchangeRate();
+
+        var originCountry = this.attributes['originCountry'];
+
+        var exchangeResult = Utility.getExchangeRate(originCountry);
         exchangeResult.then(data => {
             var exchangeRate = data.exchangeRate;
             console.log ("Current Exchange rate is " + exchangeRate);
             var transferRate = [];
             var includePause = "<break time='1s'/>";
 
-            var transferResult = Utility.getTransferRateList();
+            var transferResult = Utility.getTransferRateList(originCountry);
             transferResult.then(dataList => {
                 for (i=0; i<3; i++){    //get only top three agencies
                     transferRate.push(dataList.exchangeRateList[i]);
@@ -37,11 +40,19 @@ var handlers = {
         });
     },
 
-    "LaunchRequest" : function () {
-        var speechText = `Welcome to ${skillName}. Get the best exchange rate when you transfer money to India`;
+    "GetTransferOrigin" : function () {
+        var originCountry = this.event.request.intent.slots.originCountry.value;
+        this.attributes['originCountry'] = originCountry;
+
+        var speechText = `Ok, will provide you the rate and agency for the transfer from ${originCountry}` 
         var repromptText = `For instructions on what you can say, please say help me.`;
 
-        this.emit(':ask', speechText, repromptText);
+        this.emit(':tell', speechText, repromptText);
+    },
+
+    "LaunchRequest" : function () {
+        var speechText = `Welcome to ${skillName}. Get the best exchange rate when you transfer money to India. From which country you are planning to initiate the transfer ?`;
+        this.emit(':ask', speechText);
     },    
 
     "AMAZON.StopIntent": function () {

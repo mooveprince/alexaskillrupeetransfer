@@ -5,12 +5,25 @@ var rp = require('request-promise');
 //const transferRateUrl = currencyServiceEndpoint + "/transferrate/usdinr";
 
 const currencyServiceEndpoint = process.env.CURRENCY_API || "https://vq77lbtv42.execute-api.us-east-1.amazonaws.com/prod";
-const exchangeRateUrl = currencyServiceEndpoint + "/getExchangeRate?rateBetween=USD_INR";
-const transferRateUrl = currencyServiceEndpoint + "/getTransferRate";
+const exchangeRateUrl = currencyServiceEndpoint + "/getExchangeRate?rateBetween=";
 
-var getExchangeRate = function () {
+var getExchangeRate = function (originCountry) {
+
+    var parameter = 'USD_INR';
+
+    switch (originCountry) {
+        case 'CANADA':
+            parameter = 'CAD_INR';
+            break;
+        case 'USA':
+            parameter = 'USD_INR';
+            break;
+        default:
+        parameter = 'USD_INR';
+    }
+
     var options = {
-        uri: exchangeRateUrl,
+        uri: `${exchangeRateUrl}${parameter}`,
         json: true
     }
 
@@ -19,9 +32,23 @@ var getExchangeRate = function () {
         .catch (err => {console.log ("Error in calling API " + err.statusCode); return false})
 }
 
-var getTransferRateList = function () {
+var getTransferRateList = function (originCountry) {
+
+    var parameter = '/getTransferRate';
+
+    switch (originCountry) {
+        case 'CANADA':
+            parameter = '/getCanadaTransferRate';
+            break;
+        case 'USA':
+            parameter = '/getTransferRate';
+            break;
+        default:
+            parameter = '/getTransferRate';
+    }
+
     var options = {
-        uri: transferRateUrl,
+        uri: currencyServiceEndpoint+parameter,
         json: true
     }
 

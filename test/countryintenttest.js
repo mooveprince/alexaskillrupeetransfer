@@ -4,7 +4,7 @@ var index = require('../index');
 const context = require('aws-lambda-mock-context');
 const ctx = context();
 
-describe ("Testing a session with Transfer Intent", function () {
+describe ("Testing a session with CountryOrigin Intent", function () {
 
     var speechResponse = null
     var speechError = null
@@ -16,7 +16,7 @@ describe ("Testing a session with Transfer Intent", function () {
                 "application": {
                 "applicationId": "amzn1.ask.skill.b8e70fdd-424d-487d-9357-087b8c237697"
                 },
-                "attributes": {"originCountry":"USA"},
+                "attributes": {},
                 "user": {
                 "userId": "amzn1.ask.account.AGKCB5I7UPC6ICHTCNIF5NVSALRFPTJZ62YLCSCVVJMUZW66YN4B2PUFKIW7H7YC2PDQACGSOQRG6IF7RE3ALSNGXSJEQ2G6R3BXMLGPUV4M6KDPYOVQSYGBOLALBXOHZWU4V3VHLBGM7EYP2FCMZEOSSGLIL6PST2OZWWOPSZN5R7TW3D7TYFE2PDDN54L4IVQ7K67OEUU325A"
                 },
@@ -28,9 +28,15 @@ describe ("Testing a session with Transfer Intent", function () {
                 "locale": "en-US",
                 "timestamp": "2017-04-09T19:14:14Z",
                 "intent": {
-                    "name": "GetTransferRate"
+                    "name": "GetTransferOrigin",
+                    "slots": {
+                        "originCountry" : {
+                            "name" : "originCountry",
+                            "value": "CANADA"
+                        }
                     }
-                },
+                }
+            },
             "version": "1.0"
         }, ctx);
         
@@ -66,13 +72,13 @@ describe ("Testing a session with Transfer Intent", function () {
             expect(speechResponse.response.shouldEndSession).to.be.true
         })
 
-        it ("should have card in the response", function () {
+    /*    it ("should have card in the response", function () {
             expect(speechResponse.response.card).not.to.be.null
         })
 
         it ("should have content in the card", function () {
             expect(speechResponse.response.card.content).not.to.be.null
-        })
+        }) */
         
     })
 
